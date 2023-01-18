@@ -1,0 +1,9 @@
+.tilt-box {
+    display:flex;
+    align-items: center;
+}
+
+.tilt-img {
+    width:100px;
+}
+
