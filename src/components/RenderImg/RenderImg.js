@@ -1,9 +1,13 @@
 import React from 'react';
+import './RenderImg.css'
 
-const RenderImg = () => {
+const RenderImg = ({ imgUrl, box }) => {
     return (
-        <div>
-            <img src={'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/dog-puppy-on-garden-royalty-free-image-1586966191.jpg?crop=1.00xw:0.669xh;0,0.190xh&resize=640:*'} alt='img for detection'/>
+        <div className='center-flex ma'>
+            <div className='absolute mt2'>
+                <img id='renderImg' alt='' src={imgUrl} width='500px' height='auto' />
+                <div className='bounding-box' style={{ top: box.topRow, right: box.rightCol, bottom: box.bottomRow, left: box.leftCol }}></div>
+            </div>
         </div>
     );
 }
