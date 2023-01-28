@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
 import Navigation from './components/Navigation/Navigation';
+import SignIn from './components/SignIn/SignIn';
+import Register from './components/Register/Register';
 import Logo from './components/Logo/Logo';
 import Rank from './components/Rank/Rank';
 import FaceDetection from './components/FaceDetection/FaceDetection';
@@ -19,8 +21,19 @@ class App extends Component {
     this.state = {
       input: '',
       imgUrl: '',
-      box: {}
+      box: {},
+      route: 'signin',
+      signedIn: false
     }
+  }
+
+  onRouteChange = (route) => {
+    if(route === 'signout'){
+      this.setState({signedIn: false})
+    }else if (route === 'home'){
+      this.setState({signedIn: true})
+    }
+    this.setState({ route: route })
   }
 
   calculateFace = (data) => {
@@ -37,7 +50,7 @@ class App extends Component {
   }
 
   displayBox = (box) => {
-    this.setState({box : box})
+    this.setState({ box: box })
   }
 
   onInputChange = (event) => {
@@ -61,14 +74,24 @@ class App extends Component {
   }
 
   render() {
+    const {imgUrl , box , route , signedIn} = this.state;
     return (
       <div>
         <ParticlesBg type="cobweb" num={200} color="#D3CEFC" />
-        <Navigation />
-        <Logo />
-        <Rank />
-        <FaceDetection onInputChange={this.onInputChange} onSubmit={this.onSubmit} />
-        <RenderImg imgUrl={this.state.imgUrl} box={this.state.box}/>
+        <Navigation onRouteChange={this.onRouteChange} signedIn={signedIn}/>
+        {route === 'home'
+          ? <div>
+            <Logo />
+            <Rank />
+            <FaceDetection onInputChange={this.onInputChange} onSubmit={this.onSubmit} />
+            <RenderImg imgUrl={imgUrl} box={box} />
+          </div>
+          : (
+            route === 'signin'
+            ? <SignIn onRouteChange={this.onRouteChange} />
+            : <Register onRouteChange={this.onRouteChange} />
+            )
+        }
       </div>
     );
   }
