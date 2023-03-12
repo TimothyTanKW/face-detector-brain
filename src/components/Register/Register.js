@@ -20,7 +20,7 @@ class Register extends React.Component {
     }
 
     onSubmitSignIn = () => {
-        fetch('https://dull-red-walkingstick-tutu.cyclic.app/register', {
+        fetch('https://face-detector-brain-api.onrender.com/register', {
             method : 'post',
             headers : {'Content-Type' : 'application/json'},
             body: JSON.stringify ({

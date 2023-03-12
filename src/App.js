@@ -81,7 +81,7 @@ class App extends Component {
 
   onSubmit = () => {
     this.setState({ imgUrl: this.state.input });
-      fetch('https://dull-red-walkingstick-tutu.cyclic.app/imageurl', {
+      fetch('https://face-detector-brain-api.onrender.com/imageurl', {
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -91,7 +91,7 @@ class App extends Component {
       .then(response => response.json())
       .then(response => {
         if (response) {
-          fetch('https://dull-red-walkingstick-tutu.cyclic.app/image', {
+          fetch('https://face-detector-brain-api.onrender.com/image', {
             method: 'put',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
