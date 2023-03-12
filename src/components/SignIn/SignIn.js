@@ -43,7 +43,7 @@ class SignIn extends React.Component {
                     <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
                         <p className="f2 fw6 ph0 mh0 center">Sign In</p>
                         <div className="mt3">
-                            <label className="db fw6 lh-copy f4 white" htmlFor="email-address">Name</label>
+                            <label className="db fw6 lh-copy f4 white" htmlFor="email-address">Email</label>
                             <input 
                             onChange={this.onEmailChange} 
                             className="pa2 input-reset ba bg-transparent hover-bg-black hover-white w-100 center" type="text" name="name" id="name" />
@@ -61,10 +61,6 @@ class SignIn extends React.Component {
                     <div className="lh-copy mt3">
                         <p onClick={() => onRouteChange('register')} className="f6 link dim black db pointer white">Register</p>
                     </div>
-                    <p>Sign Name & Pwd
-                        : tim@gmail.com
-                        : timmie
-                    </p>
                 </div>
             </div>
         )

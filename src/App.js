@@ -8,41 +8,39 @@ import Rank from './components/Rank/Rank';
 import FaceDetection from './components/FaceDetection/FaceDetection';
 import RenderImg from './components/RenderImg/RenderImg';
 import ParticlesBg from 'particles-bg';
-import Clarifai from 'clarifai';
 
 
-const app = new Clarifai.App({
-  apiKey: '3239ca72021744f3a274b632fb899264'
-});
+const initialState = {
+  input: '',
+  imgUrl: '',
+  box: {},
+  route: 'signin',
+  signedIn: false,
+  user: {
+    id: '',
+    name: '',
+    email: '',
+    entries: 0,
+    joined: ''
+  }
+}
 
 class App extends Component {
   constructor() {
     super();
-    this.state = {
-      input: '',
-      imgUrl: '',
-      box: {},
-      route: 'signin',
-      signedIn: false,
-      user: {
-        id: '',
-        name: '',
-        email: '',
-        entries: 0,
-        joined: ''
-      }
-    }
+    this.state = initialState;
   }
 
   loadUser = (data) => {
-    this.setState({user: {
-      id: 'data.id',
-      name: 'data.name',
-      email: 'date.email',
-      entries: 'data.entries',
-      joined: 'data.joined'
-    }
-  })
+    this.setState({
+      user: {
+        id: data.id,
+        name: data.name,
+        email: data.email,
+        entries: data.entries,
+        joined: data.joined
+      }
+    })
   }
 
   // componentDidMount(){
@@ -52,8 +50,8 @@ class App extends Component {
   // }
 
   onRouteChange = (route) => {
-    if (route === 'signout') {
-      this.setState({ signedIn: false })
+    if (route === 'signin') {
+      this.setState(initialState)
     } else if (route === 'home') {
       this.setState({ signedIn: true })
     }
@@ -83,18 +81,34 @@ class App extends Component {
 
   onSubmit = () => {
     this.setState({ imgUrl: this.state.input });
-    app.models
-      .predict(
-        {
-          id: 'face-detection',
-          name: 'face-detection',
-          version: '6dc7e46bc9124c5c8824be4822abe105',
-          type: 'visual-detector',
-        }, this.state.input)
+      fetch('http://localhost:3000/imageurl', {
+        method: 'post',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          input: this.state.input
+        })
+      })
+      .then(response => response.json())
       .then(response => {
+        if (response) {
+          fetch('http://localhost:3000/image', {
+            method: 'put',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              id: this.state.user.id
+            })
+          })
+            .then(response => response.json())
+            .then(count => {
+              this.setState(Object.assign(this.state.user, {
+                entries: count
+              }))
+            })
+            .catch(console.log)
+        }
         this.displayBox(this.calculateFace(response));
       })
-      .catch(err => console.log(err));
+      .catch(err => console.log(err))
   }
 
   render() {
@@ -106,7 +120,7 @@ class App extends Component {
         {route === 'home'
           ? <div>
             <Logo />
-            <Rank name = {this.state.user.name} entries = {this.state.user.entries}/>
+            <Rank name={this.state.user.name} entries={this.state.user.entries} />
             <FaceDetection onInputChange={this.onInputChange} onSubmit={this.onSubmit} />
             <RenderImg imgUrl={imgUrl} box={box} />
           </div>
