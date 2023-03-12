@@ -81,7 +81,7 @@ class App extends Component {
 
   onSubmit = () => {
     this.setState({ imgUrl: this.state.input });
-      fetch('http://localhost:3000/imageurl', {
+      fetch('https://face-detector-brain-api.onrender.com/imageurl', {
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -91,7 +91,7 @@ class App extends Component {
       .then(response => response.json())
       .then(response => {
         if (response) {
-          fetch('http://localhost:3000/image', {
+          fetch('https://face-detector-brain-api.onrender.com/image', {
             method: 'put',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -110,6 +110,8 @@ class App extends Component {
       })
       .catch(err => console.log(err))
   }
+
+  //http://localhost:3000/image
 
   render() {
     const { imgUrl, box, route, signedIn } = this.state;
